@@ -57,7 +57,7 @@ public class Ruleta {
             System.out.println("N = Negro");
             System.out.println("P = Par");
             System.out.println("I = Impar");
-            System.out.print("Elige: ");
+            System.out.print("Elige:");
 
             String entrada = in.next().toUpperCase();
 

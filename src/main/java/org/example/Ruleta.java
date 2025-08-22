@@ -109,7 +109,14 @@ public class Ruleta {
  * @param apuesta monto apostado.
  * @param acierto si el jugador acertó o no.
  */
-    public static void registrarResultado(int numero, int apuesta, boolean acierto) {}
+    public static void registrarResultado(int numero, int apuesta, boolean acierto) {
+        if (historialSize < MAX_HISTORIAL) {
+            historialNumeros[historialSize] = numero;
+            historialApuestas[historialSize] = apuesta;
+            historialAciertos[historialSize] = acierto;
+            historialSize++;
+        }
+    }
     /**
      * Muestra en consola el resultado de la ronda.
      * @param numero número obtenido en la ruleta.
@@ -118,5 +125,41 @@ public class Ruleta {
      * @param acierto si el jugador ganó o perdió.
      */
     public static void mostrarResultado(int numero, char tipo, int monto, boolean
-            acierto) {}
+            acierto) {
+        String color = (numero == 0) ? "Verde" : (esRojo(numero) ? "Rojo" : "Negro");
+        System.out.println("\nLa ruleta giró: " + numero + " (" + color + ")");
+        if (acierto) {
+            System.out.println("¡Ganaste! +" + monto + " créditos");
+        } else {
+            System.out.println("Perdiste -" + monto + " créditos");
+        }
+    }
+    /**
+     * Muestra estadísticas generales de todas las rondas jugadas.
+     */
+    public static void mostrarEstadisticas() {
+        int totalApostado = 0;
+        int aciertos = 0;
+        int ganancia = 0;
+
+        for (int i = 0; i < historialSize; i++) {
+            totalApostado += historialApuestas[i];
+            if (historialAciertos[i]) {
+                aciertos++;
+                ganancia += historialApuestas[i];
+            } else {
+                ganancia -= historialApuestas[i];
+            }
+        }
+
+        System.out.println("\n Estadísticas");
+        System.out.println("Rondas jugadas: " + historialSize);
+        System.out.println("Total apostado: " + totalApostado);
+        System.out.println("Total aciertos: " + aciertos);
+        if (historialSize > 0) {
+            double porcentaje = (aciertos * 100.0) / historialSize;
+            System.out.println("% de acierto: " + String.format("%.2f", porcentaje) + "%");
+        }
+        System.out.println("Ganancia/Pérdida neta: " + ganancia);
+    }
 }

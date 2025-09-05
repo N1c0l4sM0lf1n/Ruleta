@@ -72,7 +72,6 @@ public class VentanaLogin {
         return "";
     }
 
-    // ✅ Abrir ventana de registro
     private void abrirRegistro() {
         frame.dispose();
         new VentanaRegistro().mostrarVentana();

@@ -52,7 +52,6 @@ public class VentanaRegistro {
             return;
         }
 
-        // Validar que no exista usuario repetido
         for (Usuario u : VentanaLogin.USUARIOS) {
             if (u.validarCredenciales(usuario, clave) || u.getNombre().equals(nombre)) {
                 JOptionPane.showMessageDialog(frame, "El usuario ya existe", "Error", JOptionPane.ERROR_MESSAGE);
@@ -60,7 +59,6 @@ public class VentanaRegistro {
             }
         }
 
-        // Crear usuario nuevo
         VentanaLogin.USUARIOS.add(new Usuario(usuario, clave, nombre));
         JOptionPane.showMessageDialog(frame, "Usuario registrado con éxito");
 

@@ -1,80 +1,81 @@
 package org.example;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class VentanaLogin {
+public class VentanaLogin extends JFrame {
     public static final List<Usuario> USUARIOS = new ArrayList<>();
-
-    private final JFrame frame = new JFrame("Login - Casino Black Cat");
-    private final JTextField txtUsuario = new JTextField();
-    private final JPasswordField txtClave = new JPasswordField();
-    private final JButton btnIngresar = new JButton("Ingresar");
-    private final JButton btnRegistrar = new JButton("Registrar");
+    private JTextField txtUsuario;
+    private JPasswordField txtClave;
+    private JButton btnIngresar;
+    private JButton btnRegistrar;
 
     public VentanaLogin() {
-        inicializarUsuarios();
-        configurarVentana();
+        setTitle("Login - Ruleta");
+        setSize(400, 200);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+        setLayout(new GridLayout(3, 2, 10, 10));
+
+        JLabel lblUsuario = new JLabel("Usuario:");
+        JLabel lblClave = new JLabel("Clave:");
+
+        txtUsuario = new JTextField();
+        txtClave = new JPasswordField();
+
+        btnIngresar = new JButton("Ingresar");
+        btnRegistrar = new JButton("Registrar");
+
+
+        btnIngresar.setBackground(new Color(102, 0, 153));
+        btnIngresar.setForeground(Color.WHITE);
+
+        txtUsuario.setBackground(new Color(40, 40, 40));
+        txtUsuario.setForeground(Color.WHITE);
+        txtUsuario.setCaretColor(Color.WHITE);
+
+        txtClave.setBackground(new Color(40, 40, 40));
+        txtClave.setForeground(Color.WHITE);
+        txtClave.setCaretColor(Color.WHITE);
+
+        getContentPane().setBackground(new Color(25, 25, 35));
+
+        add(lblUsuario); add(txtUsuario);
+        add(lblClave); add(txtClave);
+        add(btnIngresar); add(btnRegistrar);
+
         configurarEventos();
     }
 
-    private void inicializarUsuarios() {
-        USUARIOS.add(new Usuario("admin", "1234", "Administrador"));
-        USUARIOS.add(new Usuario("nico", "abcd", "Nicolás"));
-    }
-
-    private void configurarVentana() {
-        frame.setSize(300, 200);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setLayout(new GridLayout(4, 2, 5, 5));
-
-        frame.add(new JLabel("Usuario:"));
-        frame.add(txtUsuario);
-        frame.add(new JLabel("Clave:"));
-        frame.add(txtClave);
-        frame.add(btnIngresar);
-        frame.add(btnRegistrar);
-
-        frame.setLocationRelativeTo(null);
-    }
-
     private void configurarEventos() {
-        btnIngresar.addActionListener(e -> login());
-        btnRegistrar.addActionListener(e -> abrirRegistro());
+        btnIngresar.addActionListener(e -> intentarLogin());
+        btnRegistrar.addActionListener(e -> {
+            dispose();
+            new VentanaRegistro().mostrarVentana();
+        });
+    }
+
+    private void intentarLogin() {
+        String usuario = txtUsuario.getText().trim();
+        String clave = new String(txtClave.getPassword());
+
+        for (Usuario u : USUARIOS) {
+            if (u.validarCredenciales(usuario, clave)) {
+                dispose();
+                new VentanaSaludo(u.getNombre()).mostrarVentana();
+                return;
+            }
+        }
+
+        JOptionPane.showMessageDialog(this, "Usuario o clave incorrectos", "Error", JOptionPane.ERROR_MESSAGE);
     }
 
     public void mostrarVentana() {
-        frame.setVisible(true);
-    }
-
-    private void login() {
-        String usuario = txtUsuario.getText();
-        String clave = new String(txtClave.getPassword());
-
-        String nombre = validarCredenciales(usuario, clave);
-
-        if (!nombre.isEmpty()) {
-            JOptionPane.showMessageDialog(frame, "Bienvenido, " + nombre);
-            frame.dispose();
-            new VentanaSaludo(nombre).mostrarVentana();
-        } else {
-            JOptionPane.showMessageDialog(frame, "Credenciales inválidas", "Error", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-
-    private String validarCredenciales(String u, String p) {
-        for (Usuario user : USUARIOS) {
-            if (user.validarCredenciales(u, p)) {
-                return user.getNombre();
-            }
-        }
-        return "";
-    }
-
-    private void abrirRegistro() {
-        frame.dispose();
-        new VentanaRegistro().mostrarVentana();
+        setVisible(true);
     }
 }
+
+
 

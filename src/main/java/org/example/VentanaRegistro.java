@@ -1,4 +1,5 @@
 package org.example;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -17,7 +18,7 @@ public class VentanaRegistro {
 
     private void configurarVentana() {
         frame.setSize(350, 220);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // 🔹 Importante
         frame.setLayout(new GridLayout(4, 2, 5, 5));
 
         frame.add(new JLabel("Usuario:"));
@@ -52,13 +53,15 @@ public class VentanaRegistro {
             return;
         }
 
+        // Validar que no exista el usuario
         for (Usuario u : VentanaLogin.USUARIOS) {
-            if (u.validarCredenciales(usuario, clave) || u.getNombre().equals(nombre)) {
+            if (u.getUsuario().equals(usuario)) {
                 JOptionPane.showMessageDialog(frame, "El usuario ya existe", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
         }
 
+        // Registrar nuevo usuario
         VentanaLogin.USUARIOS.add(new Usuario(usuario, clave, nombre));
         JOptionPane.showMessageDialog(frame, "Usuario registrado con éxito");
 
@@ -70,3 +73,4 @@ public class VentanaRegistro {
         new VentanaLogin().mostrarVentana();
     }
 }
+

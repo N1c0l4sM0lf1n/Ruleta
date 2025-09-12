@@ -1,21 +1,21 @@
 package org.example;
 
 public class Usuario {
-    private String username;
-    private String password;
+    private String usuario;
+    private String clave;
     private String nombre;
 
-    public Usuario(String username, String password, String nombre) {
-        this.username = username;
-        this.password = password;
+    public Usuario(String usuario, String clave, String nombre) {
+        this.usuario = usuario;
+        this.clave = clave;
         this.nombre = nombre;
     }
 
-    public boolean validarCredenciales(String u, String p) {
-        return this.username.equals(u) && this.password.equals(p);
-    }
+    public String getUsuario() { return usuario; }
+    public String getClave() { return clave; }
+    public String getNombre() { return nombre; }
 
-    public String getNombre() {
-        return nombre;
+    public boolean validarCredenciales(String usuario, String clave) {
+        return this.usuario.equals(usuario) && this.clave.equals(clave);
     }
 }

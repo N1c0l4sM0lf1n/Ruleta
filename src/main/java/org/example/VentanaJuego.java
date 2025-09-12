@@ -125,4 +125,6 @@ public class VentanaJuego {
         txtHistorial.append(mensaje);
         txtHistorial.append("-----------------------------\n");
     }
+    private final Ruleta ruleta = new Ruleta();
+
 }

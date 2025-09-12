@@ -64,11 +64,15 @@ public class VentanaJuego {
             int monto = Integer.parseInt(txtMonto.getText());
             char tipo = traducirApuesta(comboApuesta.getSelectedItem().toString());
 
-            int numero = girarRuleta();
-            boolean acierto = evaluarResultado(numero, tipo);
+            ResultadoRonda resultado = ruleta.jugar(tipo, monto);
 
-            registrarResultado(numero, monto, acierto);
-            mostrarResultado(numero, tipo, monto, acierto);
+            String mensaje = "\nLa ruleta giró: " + resultado.getNumero() + " (" + resultado.getColor() + ")\n";
+            mensaje += resultado.isAcierto() ? "¡Ganaste! +" + monto + " créditos\n" : "Perdiste -" + monto + " créditos\n";
+
+            JOptionPane.showMessageDialog(frame, mensaje);
+
+            txtHistorial.append(mensaje);
+            txtHistorial.append("-----------------------------\n");
 
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(frame, "Ingrese un monto válido", "Error", JOptionPane.ERROR_MESSAGE);

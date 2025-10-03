@@ -33,7 +33,6 @@ public class RuletaController {
         return resultado;
     }
 
-    // 🔹 Agregar getter de sesión
     public SessionController getSession() {
         return session;
     }

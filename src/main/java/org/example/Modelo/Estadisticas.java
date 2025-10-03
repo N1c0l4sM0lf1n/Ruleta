@@ -1,4 +1,4 @@
-package org.example;
+package org.example.Modelo;
 
 public class Estadisticas {
     private final int rondasJugadas;
@@ -22,4 +22,3 @@ public class Estadisticas {
     public double getPorcentajeAciertos() { return porcentajeAciertos; }
     public int getGananciaNeta() { return gananciaNeta; }
 }
-

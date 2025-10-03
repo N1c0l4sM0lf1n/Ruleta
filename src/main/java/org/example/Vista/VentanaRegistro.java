@@ -1,4 +1,6 @@
-package org.example;
+package org.example.Vista;
+
+import org.example.Controlador.SessionController;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,14 +13,17 @@ public class VentanaRegistro {
     private final JButton btnRegistrar = new JButton("Registrar");
     private final JButton btnCancelar = new JButton("Cancelar");
 
-    public VentanaRegistro() {
+    private final SessionController session;
+
+    public VentanaRegistro(SessionController session) {
+        this.session = session;
         configurarVentana();
         configurarEventos();
     }
 
     private void configurarVentana() {
         frame.setSize(350, 220);
-        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // 🔹 Importante
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setLayout(new GridLayout(4, 2, 5, 5));
 
         frame.add(new JLabel("Usuario:"));
@@ -44,33 +49,24 @@ public class VentanaRegistro {
     }
 
     private void registrarUsuario() {
-        String usuario = txtUsuario.getText().trim();
-        String clave = new String(txtClave.getPassword());
-        String nombre = txtNombre.getText().trim();
+        try {
+            String usuario = txtUsuario.getText().trim();
+            String clave = new String(txtClave.getPassword());
+            String nombre = txtNombre.getText().trim();
 
-        if (usuario.isEmpty() || clave.isEmpty() || nombre.isEmpty()) {
-            JOptionPane.showMessageDialog(frame, "Todos los campos son obligatorios", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
+            session.registrarUsuario(usuario, clave, nombre);
+
+            JOptionPane.showMessageDialog(frame, "Usuario registrado con éxito");
+            volverLogin();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(frame, ex.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
         }
-
-        // Validar que no exista el usuario
-        for (Usuario u : VentanaLogin.USUARIOS) {
-            if (u.getUsuario().equals(usuario)) {
-                JOptionPane.showMessageDialog(frame, "El usuario ya existe", "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-        }
-
-        // Registrar nuevo usuario
-        VentanaLogin.USUARIOS.add(new Usuario(usuario, clave, nombre));
-        JOptionPane.showMessageDialog(frame, "Usuario registrado con éxito");
-
-        volverLogin();
     }
 
     private void volverLogin() {
         frame.dispose();
-        new VentanaLogin().mostrarVentana();
+        new VentanaLogin(session).mostrarVentana();
     }
 }
 

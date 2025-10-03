@@ -1,18 +1,20 @@
-package org.example;
+package org.example.Vista;
+
+import org.example.Controlador.SessionController;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class VentanaLogin extends JFrame {
-    public static final List<Usuario> USUARIOS = new ArrayList<>();
+    private final SessionController session;
     private JTextField txtUsuario;
     private JPasswordField txtClave;
     private JButton btnIngresar;
     private JButton btnRegistrar;
 
-    public VentanaLogin() {
+    public VentanaLogin(SessionController session) {
+        this.session = session;
+
         setTitle("Login - Ruleta");
         setSize(400, 200);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -28,7 +30,7 @@ public class VentanaLogin extends JFrame {
         btnIngresar = new JButton("Ingresar");
         btnRegistrar = new JButton("Registrar");
 
-
+        // Personalización
         btnIngresar.setBackground(new Color(102, 0, 153));
         btnIngresar.setForeground(Color.WHITE);
 
@@ -53,7 +55,7 @@ public class VentanaLogin extends JFrame {
         btnIngresar.addActionListener(e -> intentarLogin());
         btnRegistrar.addActionListener(e -> {
             dispose();
-            new VentanaRegistro().mostrarVentana();
+            new VentanaRegistro(session).mostrarVentana();
         });
     }
 
@@ -61,21 +63,18 @@ public class VentanaLogin extends JFrame {
         String usuario = txtUsuario.getText().trim();
         String clave = new String(txtClave.getPassword());
 
-        for (Usuario u : USUARIOS) {
-            if (u.validarCredenciales(usuario, clave)) {
-                dispose();
-                new VentanaSaludo(u.getNombre()).mostrarVentana();
-                return;
-            }
+        if (session.iniciarSesion(usuario, clave)) {
+            dispose();
+            new VentanaMenu(session).mostrarVentana();
+        } else {
+            JOptionPane.showMessageDialog(this, "Usuario o clave incorrectos",
+                    "Error", JOptionPane.ERROR_MESSAGE);
         }
-
-        JOptionPane.showMessageDialog(this, "Usuario o clave incorrectos", "Error", JOptionPane.ERROR_MESSAGE);
     }
 
     public void mostrarVentana() {
         setVisible(true);
     }
 }
-
 
 

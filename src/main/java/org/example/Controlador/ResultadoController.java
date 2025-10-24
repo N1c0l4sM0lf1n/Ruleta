@@ -20,7 +20,6 @@ public class ResultadoController {
         return usuario.getHistorial();
     }
 
-    // 🔹 Agregar getter de sesión
     public SessionController getSession() {
         return session;
     }

@@ -1,9 +1,6 @@
 package org.example.Controlador;
 
-import org.example.Modelo.Resultado;
-import org.example.Modelo.Ruleta;
-import org.example.Modelo.TipoApuesta;
-import org.example.Modelo.Usuario;
+import org.example.Modelo.*;
 
 public class RuletaController {
     private final Ruleta ruleta;
@@ -14,22 +11,28 @@ public class RuletaController {
         this.session = session;
     }
 
-    public Resultado jugarApuesta(TipoApuesta tipo, int monto) {
+    public Resultado jugarApuesta(String tipo, int monto) {
         Usuario usuario = session.getUsuarioActual();
-        if (usuario == null) {
+        if (usuario == null)
             throw new IllegalStateException("No hay usuario en sesión");
-        }
 
         usuario.apostar(monto);
 
-        Resultado resultado = ruleta.jugar(tipo, monto);
+        ApuestaBase apuesta = switch (tipo) {
+            case "Rojo" -> new ApuestaRojo(monto);
+            case "Negro" -> new ApuestaNegro(monto);
+            case "Par" -> new ApuestaPar(monto);
+            case "Impar" -> new ApuestaImpar(monto);
+            default -> throw new IllegalArgumentException("Tipo de apuesta no válido");
+        };
+
+        Resultado resultado = ruleta.jugar(apuesta);
 
         if (resultado.isAcierto()) {
             usuario.depositar(monto * 2);
         }
 
         usuario.agregarResultado(resultado);
-
         return resultado;
     }
 
@@ -37,4 +40,3 @@ public class RuletaController {
         return session;
     }
 }
-

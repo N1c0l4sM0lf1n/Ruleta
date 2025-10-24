@@ -4,7 +4,6 @@ import org.example.Controlador.RuletaController;
 import org.example.Controlador.SessionController;
 import org.example.Modelo.Resultado;
 import org.example.Modelo.Ruleta;
-import org.example.Modelo.TipoApuesta;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,7 +11,9 @@ import java.awt.*;
 public class VentanaRuleta {
     private final JFrame frame = new JFrame("Ruleta Black Cat");
     private final JTextField txtMonto = new JTextField();
-    private final JComboBox<TipoApuesta> comboApuesta = new JComboBox<>(TipoApuesta.values());
+    private final JComboBox<String> comboApuesta = new JComboBox<>(
+            new String[]{"Rojo", "Negro", "Par", "Impar"}
+    );
     private final JTextArea txtHistorial = new JTextArea();
     private final JButton btnJugar = new JButton("Jugar");
     private final JButton btnVolver = new JButton("Volver");
@@ -61,12 +62,13 @@ public class VentanaRuleta {
     private void iniciarRonda() {
         try {
             int monto = Integer.parseInt(txtMonto.getText());
-            TipoApuesta tipo = (TipoApuesta) comboApuesta.getSelectedItem();
+            String tipo = (String) comboApuesta.getSelectedItem();
 
             Resultado resultado = controller.jugarApuesta(tipo, monto);
 
-            String mensaje = "Número: " + resultado.getNumero() + " (" + resultado.getColor() + ")\n";
-            mensaje += resultado.isAcierto() ? "¡Ganaste!\n" : "Perdiste.\n";
+            String mensaje = "Número: " + resultado.getNumero() + "\n" +
+                    "Apuesta: " + resultado.getEtiqueta() + "\n" +
+                    (resultado.isAcierto() ? "¡Ganaste!\n" : "Perdiste.\n");
 
             JOptionPane.showMessageDialog(frame, mensaje);
             txtHistorial.append(mensaje + "-----------------------------\n");

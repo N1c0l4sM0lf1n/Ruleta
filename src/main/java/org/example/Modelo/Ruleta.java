@@ -11,14 +11,15 @@ public class Ruleta {
 
     private final List<Resultado> historial = new ArrayList<>();
 
-    public Ruleta() { }
-    public Ruleta(int saldoInicial) { }
+    public Ruleta() {}
 
-    public Resultado jugar(TipoApuesta tipo, int monto) {
+    public Resultado jugar(ApuestaBase apuesta) {
         int numero = girarRuleta();
-        boolean acierto = evaluarResultado(numero, tipo);
+        String color = colorDe(numero);
 
-        Resultado resultado = new Resultado(numero, tipo, monto, acierto);
+        boolean acierto = apuesta.acierta(numero, color);
+
+        Resultado resultado = new Resultado(numero, apuesta.getEtiqueta(), apuesta.getMonto(), acierto);
         historial.add(resultado);
         return resultado;
     }
@@ -27,13 +28,9 @@ public class Ruleta {
         return rng.nextInt(37);
     }
 
-    private boolean evaluarResultado(int numero, TipoApuesta tipo) {
-        return switch (tipo) {
-            case ROJO -> esRojo(numero);
-            case NEGRO -> numero != 0 && !esRojo(numero);
-            case PAR -> numero != 0 && numero % 2 == 0;
-            case IMPAR -> numero % 2 != 0;
-        };
+    private String colorDe(int numero) {
+        if (numero == 0) return "Verde";
+        return esRojo(numero) ? "Rojo" : "Negro";
     }
 
     private boolean esRojo(int n) {
@@ -47,4 +44,3 @@ public class Ruleta {
         return List.copyOf(historial);
     }
 }
-

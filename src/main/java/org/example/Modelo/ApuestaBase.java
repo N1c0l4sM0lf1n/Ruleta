@@ -1,0 +1,21 @@
+package org.example.Modelo;
+
+public abstract class ApuestaBase {
+    protected int monto;
+    protected String etiqueta;
+
+    public ApuestaBase(int monto, String etiqueta) {
+        this.monto = monto;
+        this.etiqueta = etiqueta;
+    }
+
+    public int getMonto() {
+        return monto;
+    }
+
+    public String getEtiqueta() {
+        return etiqueta;
+    }
+
+    public abstract boolean acierta(int numero, String color);
+}

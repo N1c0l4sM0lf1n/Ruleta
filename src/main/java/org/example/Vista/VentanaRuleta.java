@@ -2,6 +2,7 @@ package org.example.Vista;
 
 import org.example.Controlador.RuletaController;
 import org.example.Controlador.SessionController;
+import org.example.Modelo.RepositorioArchivo;
 import org.example.Modelo.Resultado;
 import org.example.Modelo.Ruleta;
 
@@ -9,6 +10,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class VentanaRuleta {
+
     private final JFrame frame = new JFrame("Ruleta Black Cat");
     private final JTextField txtMonto = new JTextField();
     private final JComboBox<String> comboApuesta = new JComboBox<>(
@@ -21,7 +23,12 @@ public class VentanaRuleta {
     private final RuletaController controller;
 
     public VentanaRuleta(SessionController session) {
-        this.controller = new RuletaController(new Ruleta(), session);
+
+        this.controller = new RuletaController(
+                new Ruleta(new RepositorioArchivo("historial.csv")),
+                session
+        );
+
         configurarVentana();
         configurarEventos();
     }
@@ -52,14 +59,16 @@ public class VentanaRuleta {
     }
 
     private void configurarEventos() {
-        btnJugar.addActionListener(e -> iniciarRonda());
+
+        btnJugar.addActionListener(e -> jugarRonda());
+
         btnVolver.addActionListener(e -> {
             frame.dispose();
             new VentanaMenu(controller.getSession()).mostrarVentana();
         });
     }
 
-    private void iniciarRonda() {
+    private void jugarRonda() {
         try {
             int monto = Integer.parseInt(txtMonto.getText());
             String tipo = (String) comboApuesta.getSelectedItem();

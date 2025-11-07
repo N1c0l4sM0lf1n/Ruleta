@@ -12,9 +12,8 @@ public class RuletaController {
     }
 
     public Resultado jugarApuesta(String tipo, int monto) {
-        Usuario usuario = session.getUsuarioActual();
-        if (usuario == null)
-            throw new IllegalStateException("No hay usuario en sesión");
+        var usuario = session.getUsuarioActual();
+        if (usuario == null) throw new IllegalStateException("No hay usuario en sesión");
 
         usuario.apostar(monto);
 
@@ -28,11 +27,9 @@ public class RuletaController {
 
         Resultado resultado = ruleta.jugar(apuesta);
 
-        if (resultado.isAcierto()) {
+        if (resultado.isAcierto())
             usuario.depositar(monto * 2);
-        }
 
-        usuario.agregarResultado(resultado);
         return resultado;
     }
 

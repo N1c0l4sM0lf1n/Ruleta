@@ -2,15 +2,17 @@ package org.example.Vista;
 
 import org.example.Controlador.ResultadoController;
 import org.example.Controlador.SessionController;
+import org.example.Modelo.Estadisticas;
+import org.example.Modelo.RepositorioArchivo;
 import org.example.Modelo.Resultado;
 import org.example.Modelo.Usuario;
-import org.example.Modelo.Estadisticas;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
 public class VentanaHistorial {
+
     private final JFrame frame = new JFrame("Historial de Jugadas");
     private final JTextArea txtHistorial = new JTextArea();
     private final JButton btnVolver = new JButton("Volver");
@@ -18,7 +20,7 @@ public class VentanaHistorial {
     private final ResultadoController controller;
 
     public VentanaHistorial(SessionController session) {
-        this.controller = new ResultadoController(session);
+        this.controller = new ResultadoController(session, new RepositorioArchivo("historial.csv"));
         configurarVentana();
         configurarEventos();
         cargarHistorial();
@@ -46,12 +48,13 @@ public class VentanaHistorial {
     }
 
     private void cargarHistorial() {
-        Usuario usuario = controller.getSession().getUsuarioActual();
-        if (usuario == null) {
+
+        if (!controller.getSession().hayUsuario()) {
             txtHistorial.setText("No hay usuario en sesión.");
             return;
         }
 
+        Usuario usuario = controller.getSession().getUsuarioActual();
         List<Resultado> historial = controller.obtenerHistorial();
 
         if (historial.isEmpty()) {
@@ -75,8 +78,8 @@ public class VentanaHistorial {
         }
 
         int rondasJugadas = historial.size();
-        double porcentaje = (rondasJugadas > 0) ? (totalAciertos * 100.0 / rondasJugadas) : 0;
-        int gananciaNeta = usuario.getSaldo(); // simplificado
+        double porcentaje = rondasJugadas > 0 ? (totalAciertos * 100.0 / rondasJugadas) : 0;
+        int gananciaNeta = usuario.getSaldo();
 
         Estadisticas est = new Estadisticas(rondasJugadas, totalApostado, totalAciertos, porcentaje, gananciaNeta);
 
@@ -84,7 +87,7 @@ public class VentanaHistorial {
         sb.append("Rondas jugadas: ").append(est.getRondasJugadas()).append("\n");
         sb.append("Total apostado: $").append(est.getTotalApostado()).append("\n");
         sb.append("Aciertos: ").append(est.getTotalAciertos()).append("\n");
-        sb.append("Porcentaje de aciertos: ").append(String.format("%.2f", est.getPorcentajeAciertos())).append("%\n");
+        sb.append("Porcentaje aciertos: ").append(String.format("%.2f", est.getPorcentajeAciertos())).append("%\n");
         sb.append("Ganancia neta (saldo actual): $").append(est.getGananciaNeta()).append("\n");
 
         txtHistorial.setText(sb.toString());

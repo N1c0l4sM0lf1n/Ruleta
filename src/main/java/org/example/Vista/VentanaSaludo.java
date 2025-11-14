@@ -7,10 +7,10 @@ import java.awt.*;
 
 public class VentanaSaludo {
     private final JFrame frame = new JFrame("Bienvenido");
-    private final SessionController session; // 🔹 atributo para guardar la sesión
+    private final SessionController session;
 
     public VentanaSaludo(SessionController session) {
-        this.session = session; // 🔹 ahora sí existe
+        this.session = session;
 
         frame.setSize(300, 200);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -22,7 +22,7 @@ public class VentanaSaludo {
 
         btnJugar.addActionListener(e -> {
             frame.dispose();
-            new VentanaRuleta(session).mostrarVentana(); // 🔹 usa la misma sesión
+            new VentanaRuleta(session).mostrarVentana();
         });
 
         frame.add(lblSaludo, BorderLayout.CENTER);

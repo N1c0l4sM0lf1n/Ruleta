@@ -17,6 +17,7 @@
     </properties>
 
     <dependencies>
+
         <!-- FlatLaf para el tema oscuro -->
         <dependency>
             <groupId>com.formdev</groupId>
@@ -39,6 +40,7 @@
             <version>5.20.0</version>
             <scope>test</scope>
         </dependency>
+
     </dependencies>
 
     <build>

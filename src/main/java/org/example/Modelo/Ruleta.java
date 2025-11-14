@@ -22,6 +22,7 @@ public class Ruleta {
         this.saldo = saldoInicial;
     }
 
+
     public Ruleta(IRepositorioResultados repositorio) {
         this(repositorio, 0);
     }

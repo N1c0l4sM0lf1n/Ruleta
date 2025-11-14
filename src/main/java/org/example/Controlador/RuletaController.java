@@ -11,6 +11,7 @@ public class RuletaController {
         this.session = session;
     }
 
+
     public Resultado jugarApuesta(String tipo, int monto) {
         var usuario = session.getUsuarioActual();
         if (usuario == null) throw new IllegalStateException("No hay usuario en sesión");

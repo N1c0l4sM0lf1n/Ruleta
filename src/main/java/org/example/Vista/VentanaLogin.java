@@ -75,6 +75,7 @@ public class VentanaLogin extends JFrame {
     public void mostrarVentana() {
         setVisible(true);
     }
+
 }
 
 

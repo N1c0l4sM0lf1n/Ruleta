@@ -66,4 +66,5 @@ public class VentanaMenu {
     public void mostrarVentana() {
         frame.setVisible(true);
     }
+
 }
